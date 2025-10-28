@@ -703,17 +703,19 @@ document.querySelectorAll('form').forEach(form => {
     e.preventDefault();
 
     const data = {
-      first_name: form.querySelector('[name="first_name"]')?.value || '',
-      last_name: form.querySelector('[name="last_name"]')?.value || '',
-      email: form.querySelector('[name="email"]')?.value || '',
-      phone: form.querySelector('[name="phone"]')?.value || '',
-      subdomain: window.location.hostname, // 👈 Add subdomain tracking
+      first_name: form.querySelector('[name="first_name"]')?.value?.trim() || '',
+      last_name: form.querySelector('[name="last_name"]')?.value?.trim() || '',
+      email: form.querySelector('[name="email"]')?.value?.trim() || '',
+      phone: form.querySelector('[name="phone"]')?.value?.trim() || '',
+      country: form.querySelector('[name="country"]')?.value?.trim() || '',
+      form_id: 'qtesler-main',
+      subdomain: window.location.hostname,
       page_url: window.location.href,
       timestamp: new Date().toISOString(),
       user_agent: navigator.userAgent
     };
 
-    const zapierWebhook = 'https://hooks.zapier.com/hooks/catch/21691543/uid5rk4/';
+    const zapierWebhook = 'https://hooks.zapier.com/hooks/catch/21691543/ui9taqd/';
 
     try {
       await fetch(zapierWebhook, {
@@ -723,10 +725,10 @@ document.querySelectorAll('form').forEach(form => {
         body: JSON.stringify(data)
       });
 
-      window.location.href = `https://${window.location.hostname}/thank-you.html`;
-
+      // ✅ Redirect to thank-you page
+      window.location.href = `https://${window.location.hostname}/thank-you1.html`;
     } catch (err) {
-      console.error('❌ Error sending data:', err);
+      console.error('❌ Error sending data to Zapier:', err);
       alert('⚠️ Submission failed. Please try again.');
     }
   });
