@@ -697,6 +697,42 @@
 			spotElements[i].innerHTML = `The number of spots is limited: ${spots} spots available.`;
 		}
 	</script>
+	<script>
+document.querySelectorAll('form').forEach(form => {
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const data = {
+      first_name: form.querySelector('[name="first_name"]')?.value || '',
+      last_name: form.querySelector('[name="last_name"]')?.value || '',
+      email: form.querySelector('[name="email"]')?.value || '',
+      phone: form.querySelector('[name="phone"]')?.value || '',
+      subdomain: window.location.hostname, // 👈 Add subdomain tracking
+      page_url: window.location.href,
+      timestamp: new Date().toISOString(),
+      user_agent: navigator.userAgent
+    };
+
+    const zapierWebhook = 'https://hooks.zapier.com/hooks/catch/21691543/uid5rk4/';
+
+    try {
+      await fetch(zapierWebhook, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      window.location.href = '/thank-you.html'; // 👈 redirect after submit
+
+    } catch (err) {
+      console.error('❌ Error sending data:', err);
+      alert('⚠️ Submission failed. Please try again.');
+    }
+  });
+});
+</script>
+
 
 
 </body></html>
